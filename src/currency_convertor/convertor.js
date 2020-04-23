@@ -18,7 +18,10 @@ class CurrencyConvertor extends Component {
         this.CurrenciesListInputChange = this.CurrenciesListInputChange.bind(this);
         this.Validate = this.Validate.bind(this);
         this.SetValues = this.SetValues.bind(this);
+        this.ChangeOption = this.ChangeOption.bind(this);
         this.state = {
+            change_button_text_set: "Add Currency",
+            change_button_option_text: "Show Added Currencies" ,
             available_currencies: currencies.map(a => Object.assign({}, a)),
             selected_currencies: []
         };
@@ -26,8 +29,11 @@ class CurrencyConvertor extends Component {
 
     ChangeOption() {
         document.querySelector(".add-currency-btn").classList.toggle("open");
-        document.querySelector(".add-currency-btn").textContent =
-            document.querySelector(".add-currency-btn").textContent === "Add Currency" ? "Show Added Currencies" : "Add Currency";
+        const text_set = this.state.change_button_text_set;
+        const  option_text = this.state.change_button_option_text;
+        this.setState({change_button_text_set: option_text, change_button_option_text: text_set} )
+        //document.querySelector(".add-currency-btn").textContent =
+        //    document.querySelector(".add-currency-btn").textContent === "Add Currency" ? "Show Added Currencies" : "Add Currency";
     }
 
     RemoveFormAvailable(e) {
@@ -175,7 +181,7 @@ class CurrencyConvertor extends Component {
                         })}
 
                     </ul>
-                    <button className="add-currency-btn" onClick={this.ChangeOption}>Add Currency</button>
+                    <button className="add-currency-btn" onClick={this.ChangeOption}>{this.state.change_button_text_set}</button>
 
                     <ul className="add-currency-list">
                         <br/>
