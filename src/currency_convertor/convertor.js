@@ -4,7 +4,7 @@ import $ from "jquery";
 import "./style.css";
 import "react-custom-scrollbars";
 import currencies from "./currencies_";
-
+var axios = require("axios");
 
 //"USD,JPY,GBP,AUD,CAD,CHF,CNY,SEK,NZD,MXN"
 
@@ -13,12 +13,12 @@ class CurrencyConvertor extends Component {
     constructor(props) {
         super(props);
         this.DiffMinutes = this.DiffMinutes.bind(this);
-        this.GetCurrenciesData = this.GetCurrenciesData.bind(this);
         this.RemoveFormAvailable = this.RemoveFormAvailable.bind(this);
         this.CurrenciesListInputChange = this.CurrenciesListInputChange.bind(this);
         this.Validate = this.Validate.bind(this);
         this.SetValues = this.SetValues.bind(this);
         this.ChangeOption = this.ChangeOption.bind(this);
+        this.GetCurrencyRateOnlineData = this.GetCurrencyRateOnlineData.bind(this);
         this.state = {
             change_button_text_set: "Add Currency",
             change_button_option_text: "Show Added Currencies" ,
@@ -47,27 +47,16 @@ class CurrencyConvertor extends Component {
         this.setState({available_currencies: arr});
     }
 
-    async GetCurrenciesData(baseCurrency, query) {
-        let settings = {
-            "async": true,
-            "crossDomain": true,
-            "url": "https://fixer-fixer-currency-v1.p.rapidapi.com/latest?base=" + baseCurrency + "&symbols=" + query,
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "fixer-fixer-currency-v1.p.rapidapi.com",
-                "x-rapidapi-key": "afeaa952b5msh230ac1d5210726ap1e45c6jsnf308141e2d2f"
-            }
-        }
 
-        await $.ajax(settings).done(function (response) {
-            //   alert("1 " +JSON.stringify(response));
-            localStorage.setItem(baseCurrency, JSON.stringify({
-                "date": new Date().toLocaleString(),
-                "currencies_data": JSON.stringify(response)
-            }));
-            return response;
-        });
-    }
+    async  GetCurrencyRateOnlineData(baseCurrency, query){
+    return axios.get( "https://fixer-fixer-currency-v1.p.rapidapi.com/latest?base=" + baseCurrency + "&symbols=" + query, {
+        headers: {
+             "x-rapidapi-host": "fixer-fixer-currency-v1.p.rapidapi.com",
+                "x-rapidapi-key": "afeaa952b5msh230ac1d5210726ap1e45c6jsnf308141e2d2f"
+        },
+    })
+};
+
 
     DiffMinutes(dt2, dt1) {
         let diff = Math.abs(new Date(dt2) - new Date(dt1));
@@ -77,19 +66,28 @@ class CurrencyConvertor extends Component {
     }
 
     SetValues(data, curr_name, v) {
-        data = JSON.parse(data).rates;
+//        alert(JSON.stringify(data));
+
         this.setState(prevState => ({
             selected_currencies: prevState.selected_currencies.map(
                 e => {
                     let c = Object.assign({}, e);
-                    if (c.abbreviation !== curr_name) {
-                        c.input_value = (data[c.abbreviation] * v).toFixed(4);
-                        c.textContent = `1 ${curr_name} = ${data[c.abbreviation]} ${c.abbreviation}`;
-                    } else {
-                        c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
-                        c.input_value = v;
-                        c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
-                    }
+
+                        if (c.abbreviation !== curr_name) {
+                          //  alert("  " +JSON.stringify(data) + " "+ JSON.stringify(typeof data) + c.abbreviation + " "+ JSON.stringify(data[c.abbreviation]));
+                            if (v !== "") {
+                                c.input_value = (parseFloat(data[c.abbreviation]) * parseFloat(v)).toFixed(4).toString();
+                                c.textContent = `1 ${curr_name} = ${data[c.abbreviation]} ${c.abbreviation}`;
+                            }
+                            else{
+                                 c.input_value = "";
+                                   c.textContent = `1 ${c.abbreviation} = ${1} ${c.abbreviation}`;
+                            }
+                        } else {
+                            c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
+                            c.input_value =  v;
+                        }
+
                     return c;
                 }
             )
@@ -97,29 +95,42 @@ class CurrencyConvertor extends Component {
 
     }
 
+
 //"USD,JPY,GBP,AUD,CAD,CHF,CNY,SEK,NZD,MXN"
-    CurrenciesListInputChange(event, v) {
+    async CurrenciesListInputChange(event, v) {
+
         let curr_name = event.target.closest("li").id;
+
         let info = null;
         let query = currencies.map(a => a.abbreviation);
+
 
         if (localStorage.getItem(curr_name)) {
             let saved = JSON.parse(localStorage.getItem(curr_name)).date;
 
             if (this.DiffMinutes(new Date(), saved) > 30) {
-                $.when(this.GetCurrenciesData(curr_name, query)).done((e) => {
-                    info = localStorage.getItem(curr_name).currencies_data;
-                    this.SetValues(info, curr_name, v);
-                });
+                    let res = await this.GetCurrencyRateOnlineData(curr_name,query);
+                 //   alert(JSON.stringify(res));
+                   //     alert("1 "+JSON.stringify(res.data.rates));
+                    localStorage.setItem(curr_name, JSON.stringify({
+                "date": new Date().toLocaleString(),
+                "currencies_data": JSON.stringify(res.data.rates)
+            }));
+                    this.SetValues(res.data.rates, curr_name, v);
+
             } else {
-                info = JSON.parse(localStorage.getItem(curr_name)).currencies_data;
-                this.SetValues(info, curr_name, v);
+                info = JSON.parse(localStorage.getItem(curr_name));
+                this.SetValues(JSON.parse(info.currencies_data), curr_name, v);
             }
         } else {
-            $.when(this.GetCurrenciesData(curr_name, query)).done((e) => {
-                info = localStorage.getItem(curr_name).currencies_data;
-                this.SetValues(info, curr_name, v);
-            });
+                const res = await this.GetCurrencyRateOnlineData(curr_name,query);
+                 localStorage.setItem(curr_name, JSON.stringify({
+                "date": new Date().toLocaleString(),
+                "currencies_data": JSON.stringify(res.data.rates)
+            }));
+               info = JSON.parse(localStorage.getItem(curr_name));
+                this.SetValues(JSON.parse(info.currencies_data), curr_name, v);
+
         }
     }
 
@@ -127,7 +138,7 @@ class CurrencyConvertor extends Component {
         const input = event.target.value;
         const re = /^\d*\.?\d*$/;
         if (re.test(input)) {
-            this.CurrenciesListInputChange(event, input);
+           this.CurrenciesListInputChange(event, input);
         }
     }
 
@@ -147,7 +158,8 @@ class CurrencyConvertor extends Component {
         let key = theEvent.keyCode || theEvent.which;
         key = String.fromCharCode(key);
         let regex = /[0-9]|\./;
-        if (!regex.test(key)) {
+
+        if (!regex.test(key) ) {
             theEvent.returnValue = false;
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
