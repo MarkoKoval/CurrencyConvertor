@@ -18,10 +18,7 @@ class CurrencyConvertor extends Component {
         this.CurrenciesListInputChange = this.CurrenciesListInputChange.bind(this);
         this.Validate = this.Validate.bind(this);
         this.SetValues = this.SetValues.bind(this);
-       // alert(currencies.length);
         this.state = {
-            baseCurrency: "",
-            baseCurrencyAmount: 0,
             available_currencies: currencies.map(a => Object.assign({}, a)),
             selected_currencies: []
         };
@@ -34,11 +31,6 @@ class CurrencyConvertor extends Component {
     }
 
     RemoveFormAvailable(e) {
-        if (document.querySelector(".currencies").childElementCount === 0) {
-            this.setState({baseCurrency: e});
-            this.setState({baseCurrencyAmount: 0});
-        }
-
         let i = this.state.available_currencies.find(el => el.abbreviation === e);
         this.setState({selected_currencies: [...this.state.selected_currencies, i]});
         let arr = this.state.available_currencies;
@@ -80,36 +72,36 @@ class CurrencyConvertor extends Component {
 
     SetValues(data, curr_name, v) {
         data = JSON.parse(data).rates;
-       // alert(JSON.stringify(data));
-        document.querySelector(".currencies").querySelectorAll(".currency").forEach(currencyLI => {
-            let rate = data[currencyLI.id];
-
-            currencyLI.querySelector(".base-currency-rate").textContent = `1 ${curr_name} = ${rate} ${currencyLI.id}`;
-            if (curr_name === currencyLI.id) {
-                currencyLI.querySelector(".base-currency-rate").textContent = `1 ${curr_name} = ${1} ${currencyLI.id}`;
-            }
-        });
-
-        document.querySelector(".currencies").querySelectorAll(".currency").forEach(currencyLI => {
-            if (currencyLI.id !== curr_name) {
-                const currencyRate = data[currencyLI.id];
-                currencyLI.querySelector(".input input").value = (currencyRate * v).toFixed(4);
-            }
-        });
-
+        this.setState(prevState => ({
+            selected_currencies: prevState.selected_currencies.map(
+                e => {
+                    let c = Object.assign({}, e);
+                    if (c.abbreviation !== curr_name) {
+                        c.input_value = (data[c.abbreviation] * v).toFixed(4);
+                        c.textContent = `1 ${curr_name} = ${data[c.abbreviation]} ${c.abbreviation}`;
+                    } else {
+                        c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
+                        c.input_value = v;
+                        c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
+                    }
+                    return c;
+                }
+            )
+        }));
 
     }
+
 //"USD,JPY,GBP,AUD,CAD,CHF,CNY,SEK,NZD,MXN"
     CurrenciesListInputChange(event, v) {
         let curr_name = event.target.closest("li").id;
-        var info = null;
+        let info = null;
         let query = currencies.map(a => a.abbreviation);
 
         if (localStorage.getItem(curr_name)) {
             let saved = JSON.parse(localStorage.getItem(curr_name)).date;
 
             if (this.DiffMinutes(new Date(), saved) > 30) {
-                $.when(this.GetCurrenciesData(curr_name, query)).done(function (e) {
+                $.when(this.GetCurrenciesData(curr_name, query)).done((e) => {
                     info = localStorage.getItem(curr_name).currencies_data;
                     this.SetValues(info, curr_name, v);
                 });
@@ -118,7 +110,7 @@ class CurrencyConvertor extends Component {
                 this.SetValues(info, curr_name, v);
             }
         } else {
-            $.when(this.GetCurrenciesData(curr_name, query)).done(function (e) {
+            $.when(this.GetCurrenciesData(curr_name, query)).done((e) => {
                 info = localStorage.getItem(curr_name).currencies_data;
                 this.SetValues(info, curr_name, v);
             });
@@ -136,9 +128,7 @@ class CurrencyConvertor extends Component {
     RemoveFromSelected(abbreviation) {
         let i = this.state.selected_currencies.find(el => el.abbreviation === abbreviation);
         let arr = this.state.selected_currencies;
-        let removeIndex = arr.map(function (item) {
-            return item.abbreviation;
-        }).indexOf(abbreviation);
+        let removeIndex = arr.map((item) => item.abbreviation).indexOf(abbreviation);
         arr.splice(removeIndex, 1);
         this.setState({available_currencies: arr});
         this.setState({available_currencies: [...this.state.available_currencies, i]});
@@ -161,7 +151,7 @@ class CurrencyConvertor extends Component {
         return (
 
             <Draggable>
-                <div id = "section2" className="container">
+                <div className="container">
                     <div className="currency-flag currency-flag-usd"></div>
                     <div className="date"></div>
                     <ul className="currencies">
@@ -173,9 +163,9 @@ class CurrencyConvertor extends Component {
                                 <div class="info">
                                     <p class="input" onKeyPress={this.validate} onChange={this.NameChange.bind(this)}>
                                         <span class="currency-symbol">{currency.symbol}</span><input
-                                        placeholder="0.0000"/></p>
+                                        value={currency.input_value} placeholder="0.0000"/></p>
                                     <p class="currency-name">{currency.abbreviation} - {currency.name}</p>
-                                    <p class="base-currency-rate"> {this.state.baseCurrency} - {currency.abbreviation}</p>
+                                    <p class="base-currency-rate">  {currency.textContent} </p>
                                 </div>
                                 <span className="close"
                                       onClick={() => this.RemoveFromSelected(currency.abbreviation)}>&times;</span>

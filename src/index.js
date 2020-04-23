@@ -1,11 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-//import './index.css';
-//import App from './App';
 import * as serviceWorker from './serviceWorker';
-//import  BodyComponent from "./currency_convertor/body_component"
-//import Too from "./currency_convertor/t"
-import  CurrencyConvertor from "./currency_convertor/convert"
+import  CurrencyConvertor from "./currency_convertor/convertor"
 ReactDOM.render(
 
     <CurrencyConvertor/>,
