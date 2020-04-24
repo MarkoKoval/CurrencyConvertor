@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import Draggable from "react-draggable";
-import $ from "jquery";
 import "./style.css";
 import "react-custom-scrollbars";
 import currencies from "./currencies_";
-var axios = require("axios");
+import axios from "axios";
 
 //"USD,JPY,GBP,AUD,CAD,CHF,CNY,SEK,NZD,MXN"
 
@@ -21,7 +20,7 @@ class CurrencyConvertor extends Component {
         this.GetCurrencyRateOnlineData = this.GetCurrencyRateOnlineData.bind(this);
         this.state = {
             change_button_text_set: "Add Currency",
-            change_button_option_text: "Show Added Currencies" ,
+            change_button_option_text: "Show Added Currencies",
             available_currencies: currencies.map(a => Object.assign({}, a)),
             selected_currencies: []
         };
@@ -30,10 +29,8 @@ class CurrencyConvertor extends Component {
     ChangeOption() {
         document.querySelector(".add-currency-btn").classList.toggle("open");
         const text_set = this.state.change_button_text_set;
-        const  option_text = this.state.change_button_option_text;
-        this.setState({change_button_text_set: option_text, change_button_option_text: text_set} )
-        //document.querySelector(".add-currency-btn").textContent =
-        //    document.querySelector(".add-currency-btn").textContent === "Add Currency" ? "Show Added Currencies" : "Add Currency";
+        const option_text = this.state.change_button_option_text;
+        this.setState({change_button_text_set: option_text, change_button_option_text: text_set})
     }
 
     RemoveFormAvailable(e) {
@@ -48,14 +45,14 @@ class CurrencyConvertor extends Component {
     }
 
 
-    async  GetCurrencyRateOnlineData(baseCurrency, query){
-    return axios.get( "https://fixer-fixer-currency-v1.p.rapidapi.com/latest?base=" + baseCurrency + "&symbols=" + query, {
-        headers: {
-             "x-rapidapi-host": "fixer-fixer-currency-v1.p.rapidapi.com",
+    async GetCurrencyRateOnlineData(baseCurrency, query) {
+        return axios.get("https://fixer-fixer-currency-v1.p.rapidapi.com/latest?base=" + baseCurrency + "&symbols=" + query, {
+            headers: {
+                "x-rapidapi-host": "fixer-fixer-currency-v1.p.rapidapi.com",
                 "x-rapidapi-key": "afeaa952b5msh230ac1d5210726ap1e45c6jsnf308141e2d2f"
-        },
-    })
-};
+            },
+        })
+    };
 
 
     DiffMinutes(dt2, dt1) {
@@ -73,20 +70,19 @@ class CurrencyConvertor extends Component {
                 e => {
                     let c = Object.assign({}, e);
 
-                        if (c.abbreviation !== curr_name) {
-                          //  alert("  " +JSON.stringify(data) + " "+ JSON.stringify(typeof data) + c.abbreviation + " "+ JSON.stringify(data[c.abbreviation]));
-                            if (v !== "") {
-                                c.input_value = (parseFloat(data[c.abbreviation]) * parseFloat(v)).toFixed(4).toString();
-                                c.textContent = `1 ${curr_name} = ${data[c.abbreviation]} ${c.abbreviation}`;
-                            }
-                            else{
-                                 c.input_value = "";
-                                   c.textContent = `1 ${c.abbreviation} = ${1} ${c.abbreviation}`;
-                            }
+                    if (c.abbreviation !== curr_name) {
+                        //  alert("  " +JSON.stringify(data) + " "+ JSON.stringify(typeof data) + c.abbreviation + " "+ JSON.stringify(data[c.abbreviation]));
+                        if (v !== "") {
+                            c.input_value = (parseFloat(data[c.abbreviation]) * parseFloat(v)).toFixed(4).toString();
+                            c.textContent = `1 ${curr_name} = ${data[c.abbreviation]} ${c.abbreviation}`;
                         } else {
-                            c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
-                            c.input_value =  v;
+                            c.input_value = "";
+                            c.textContent = `1 ${c.abbreviation} = ${1} ${c.abbreviation}`;
                         }
+                    } else {
+                        c.textContent = `1 ${curr_name} = ${1} ${curr_name}`;
+                        c.input_value = v;
+                    }
 
                     return c;
                 }
@@ -109,27 +105,26 @@ class CurrencyConvertor extends Component {
             let saved = JSON.parse(localStorage.getItem(curr_name)).date;
 
             if (this.DiffMinutes(new Date(), saved) > 30) {
-                    let res = await this.GetCurrencyRateOnlineData(curr_name,query);
-                 //   alert(JSON.stringify(res));
-                   //     alert("1 "+JSON.stringify(res.data.rates));
-                    localStorage.setItem(curr_name, JSON.stringify({
-                "date": new Date().toLocaleString(),
-                "currencies_data": JSON.stringify(res.data.rates)
-            }));
-                    this.SetValues(res.data.rates, curr_name, v);
+                let res = await this.GetCurrencyRateOnlineData(curr_name, query);
+                //   alert(JSON.stringify(res));
+                //     alert("1 "+JSON.stringify(res.data.rates));
+                localStorage.setItem(curr_name, JSON.stringify({
+                    "date": new Date().toLocaleString(),
+                    "currencies_data": JSON.stringify(res.data.rates)
+                }));
+                this.SetValues(res.data.rates, curr_name, v);
 
             } else {
                 info = JSON.parse(localStorage.getItem(curr_name));
                 this.SetValues(JSON.parse(info.currencies_data), curr_name, v);
             }
         } else {
-                const res = await this.GetCurrencyRateOnlineData(curr_name,query);
-                 localStorage.setItem(curr_name, JSON.stringify({
+            let res = await this.GetCurrencyRateOnlineData(curr_name, query);
+            localStorage.setItem(curr_name, JSON.stringify({
                 "date": new Date().toLocaleString(),
                 "currencies_data": JSON.stringify(res.data.rates)
             }));
-               info = JSON.parse(localStorage.getItem(curr_name));
-                this.SetValues(JSON.parse(info.currencies_data), curr_name, v);
+            this.SetValues(res.data.rates, curr_name, v);
 
         }
     }
@@ -138,16 +133,14 @@ class CurrencyConvertor extends Component {
         const input = event.target.value;
         const re = /^\d*\.?\d*$/;
         if (re.test(input)) {
-           this.CurrenciesListInputChange(event, input);
+            this.CurrenciesListInputChange(event, input);
         }
     }
 
     RemoveFromSelected(abbreviation) {
         let i = this.state.selected_currencies.find(el => el.abbreviation === abbreviation);
-        let arr = this.state.selected_currencies;
-        let removeIndex = arr.map((item) => item.abbreviation).indexOf(abbreviation);
-        arr.splice(removeIndex, 1);
-        this.setState({available_currencies: arr});
+        let arr = this.state.selected_currencies.filter(item => item.abbreviation !== abbreviation);
+        this.setState({selected_currencies: arr});
         this.setState({available_currencies: [...this.state.available_currencies, i]});
 
     }
@@ -159,7 +152,7 @@ class CurrencyConvertor extends Component {
         key = String.fromCharCode(key);
         let regex = /[0-9]|\./;
 
-        if (!regex.test(key) ) {
+        if (!regex.test(key)) {
             theEvent.returnValue = false;
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
@@ -180,8 +173,9 @@ class CurrencyConvertor extends Component {
                                 <img src={currency.flagURL} class="flag"/>
                                 <div class="info">
                                     <p class="input" onKeyPress={this.validate} onChange={this.NameChange.bind(this)}>
-                                        <span class="currency-symbol">{currency.symbol}</span><input
-                                        value={currency.input_value} placeholder="0.0000"/></p>
+                                        <span class="currency-symbol">{currency.symbol}</span>
+                                        <input value={currency.input_value} placeholder="0.0000"/>
+                                    </p>
                                     <p class="currency-name">{currency.abbreviation} - {currency.name}</p>
                                     <p class="base-currency-rate">  {currency.textContent} </p>
                                 </div>
@@ -193,15 +187,16 @@ class CurrencyConvertor extends Component {
                         })}
 
                     </ul>
-                    <button className="add-currency-btn" onClick={this.ChangeOption}>{this.state.change_button_text_set}</button>
+                    <button className="add-currency-btn"
+                            onClick={this.ChangeOption}>{this.state.change_button_text_set}</button>
 
                     <ul className="add-currency-list">
-                        <br/>
+
                         {this.state.available_currencies.map(value => {
-                            return <li data-currency={value.abbreviation}
-                                       onClick={() => this.RemoveFormAvailable(value.abbreviation)}>
-                                <img src={value.flagURL} class="flag"/><span>{value.abbreviation} - {value.name}</span>
-                            </li>
+                            return <li data-currency={value.abbreviation}  onClick={() => this.RemoveFormAvailable(value.abbreviation)}>
+                                        <img src={value.flagURL} class="flag"/>
+                                        <span>{value.abbreviation} - {value.name}</span>
+                                   </li>
                         })}
 
 

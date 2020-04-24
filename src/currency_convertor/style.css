@@ -15,6 +15,7 @@ body {
 }
 .container {
   width: 500px;
+  padding-top: 10px;
   margin: 20px auto;
   user-select: none;
   overflow-x: hidden;
