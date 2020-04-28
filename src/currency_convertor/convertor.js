@@ -19,29 +19,42 @@ class CurrencyConvertor extends Component {
         this.ChangeOption = this.ChangeOption.bind(this);
         this.GetCurrencyRateOnlineData = this.GetCurrencyRateOnlineData.bind(this);
         this.state = {
-            change_button_text_set: "Add Currency",
-            change_button_option_text: "Show Added Currencies",
             available_currencies: currencies.map(a => Object.assign({}, a)),
-            selected_currencies: []
+            selected_currencies: [],
+            isOpen: true
         };
     }
 
     ChangeOption() {
-        document.querySelector(".add-currency-btn").classList.toggle("open");
-        const text_set = this.state.change_button_text_set;
+     //   alert(this.state.isOpen);
+        this.setState({isOpen: !this.state.isOpen})
+            //    alert(this.state.isOpen);
+        //document.querySelector(".add-currency-btn").classList.toggle("open");
+        /*const text_set = this.state.change_button_text_set;
         const option_text = this.state.change_button_option_text;
-        this.setState({change_button_text_set: option_text, change_button_option_text: text_set})
+        this.setState({change_button_text_set: option_text, change_button_option_text: text_set})*/
+    }
+/*
+ RemoveFromSelected(abbreviation) {
+        let i = this.state.selected_currencies.find(el => el.abbreviation === abbreviation);
+        let arr = this.state.selected_currencies.filter(item => item.abbreviation !== abbreviation);
+        this.setState({selected_currencies: arr, available_currencies: [...this.state.available_currencies, i]});
+       // this.setState({available_currencies: [...this.state.available_currencies, i]});
+
     }
 
+*/
     RemoveFormAvailable(e) {
         let i = this.state.available_currencies.find(el => el.abbreviation === e);
-        this.setState({selected_currencies: [...this.state.selected_currencies, i]});
+        let arr = this.state.available_currencies.filter(item => item.abbreviation !== e);
+        this.setState({available_currencies: arr, selected_currencies: [...this.state.selected_currencies, i]});
+       /* this.setState({selected_currencies: [...this.state.selected_currencies, i]});
         let arr = this.state.available_currencies;
         let removeIndex = this.state.available_currencies.map(function (item) {
             return item.abbreviation;
         }).indexOf(e);
         arr.splice(removeIndex, 1);
-        this.setState({available_currencies: arr});
+        this.setState({available_currencies: arr});*/
     }
 
 
@@ -140,8 +153,8 @@ class CurrencyConvertor extends Component {
     RemoveFromSelected(abbreviation) {
         let i = this.state.selected_currencies.find(el => el.abbreviation === abbreviation);
         let arr = this.state.selected_currencies.filter(item => item.abbreviation !== abbreviation);
-        this.setState({selected_currencies: arr});
-        this.setState({available_currencies: [...this.state.available_currencies, i]});
+        this.setState({selected_currencies: arr, available_currencies: [...this.state.available_currencies, i]});
+       // this.setState({available_currencies: [...this.state.available_currencies, i]});
 
     }
 
@@ -187,10 +200,10 @@ class CurrencyConvertor extends Component {
                         })}
 
                     </ul>
-                    <button className="add-currency-btn"
-                            onClick={this.ChangeOption}>{this.state.change_button_text_set}</button>
+                    <button className={ !this.state.isOpen ? "add-currency-btn": ""}
+                            onClick={this.ChangeOption}>{this.state.isOpen?"Add Currency":"Show Added Currencies"}</button>
 
-                    <ul className="add-currency-list">
+                    <ul className= "add-currency-list">
 
                         {this.state.available_currencies.map(value => {
                             return <li data-currency={value.abbreviation}  onClick={() => this.RemoveFormAvailable(value.abbreviation)}>
