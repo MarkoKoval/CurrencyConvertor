@@ -29,7 +29,7 @@ class CurrencyConvertor extends Component {
      //   alert(this.state.isOpen);
         this.setState({isOpen: !this.state.isOpen})
             //    alert(this.state.isOpen);
-        document.querySelector(".add-currency-btn").classList.toggle("open");
+       // document.querySelector(".add-currency-btn").classList.toggle("open");
         /*const text_set = this.state.change_button_text_set;
         const option_text = this.state.change_button_option_text;
         this.setState({change_button_text_set: option_text, change_button_option_text: text_set})*/
@@ -200,7 +200,7 @@ class CurrencyConvertor extends Component {
                         })}
 
                     </ul>
-                    <button className="add-currency-btn"
+                    <button className={this.state.isOpen?"add-currency-btn": "add-currency-btn open" }
                             onClick={this.ChangeOption}>{this.state.isOpen?"Add Currency":"Show Added Currencies"}</button>
 
                     <ul className= "add-currency-list">
