@@ -207,7 +207,7 @@ class CurrencyConvertor extends Component {
 
                         {this.state.available_currencies.map(value => {
                             return <li data-currency={value.abbreviation}  onClick={() => this.RemoveFormAvailable(value.abbreviation)}>
-                                        <img  alt={currency.abbreviation} src={value.flagURL} class="flag"/>
+                                        <img  alt={value.abbreviation} src={value.flagURL} class="flag"/>
                                         <span>{value.abbreviation} - {value.name}</span>
                                    </li>
                         })}
