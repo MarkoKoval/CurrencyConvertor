@@ -12,6 +12,7 @@ body {
   font-family: 'Montserrat', sans-serif;
 
   color: #fff;
+  cursor: pointer;
 }
 .container {
   width: 400px;
@@ -20,11 +21,13 @@ body {
   user-select: none;
   overflow-x: hidden;
   position: relative;
+  cursor: pointer;
 }
 .header {
   background-color: #2d2d37;
   text-align: center;
   padding: 1.75rem;
+
 }
 .header h1 {
   font-size: 2.25rem;
@@ -80,6 +83,7 @@ ul.currencies li.base-currency {
   color: #fff;
   padding: 0.3rem;
   margin-bottom: 0.75rem;
+   cursor: pointer;
 }
 .info .currency-name {
   font-size: 1rem;
@@ -176,9 +180,11 @@ ul.add-currency-list li span {
 }
 .add-currency-btn.open + ul.add-currency-list {
   left: 0;
+  cursor: pointer;
 }
 .add-currency-btn.open + ul.add-currency-list li:hover {
   background-color: #ddd;
+  cursor: pointer;
 }
 
 @media (max-width: 600px) {
@@ -193,10 +199,12 @@ ul.add-currency-list li span {
   .info .base-currency-rate { margin-left: 3.5rem; }
   ul.add-currency-list { bottom: 48px; height: calc(100vh - 80px - 51px); }
   .add-currency-btn i { left: 25%; top:0.65rem; }
+
 }
 
 body{
   overflow-x: hidden;
+  cursor: pointer;
 }
 
 input {
@@ -207,6 +215,7 @@ input {
   height: 30px;
   width: 450px;
   border-radius: 5px;
+  cursor: pointer;
 }
 
 #search-input {
@@ -215,4 +224,5 @@ input {
   margin-right: 55px;
   margin-top: 10px;
   width: 370px;
+  cursor: pointer;
 }

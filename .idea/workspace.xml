@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="947dc7a5-bd4c-405b-a985-41f330f22d08" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/src/currency_convertor/convertor.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/currency_convertor/convertor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/currency_convertor/style.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/currency_convertor/style.css" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -26,14 +25,14 @@
     <select />
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.20019157">
+    <splitter split-orientation="horizontal" split-proportion="0.45498392">
       <split-first>
         <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
           <file pinned="false" current-in-tab="false">
             <entry file="file://$PROJECT_DIR$/src/currency_convertor/convertor.js">
               <provider selected="true" editor-type-id="text-editor">
                 <state relative-caret-position="122">
-                  <caret line="216" column="70" selection-start-line="216" selection-start-column="68" selection-end-line="216" selection-end-column="80" />
+                  <caret line="210" column="70" selection-start-line="210" selection-start-column="68" selection-end-line="210" selection-end-column="80" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -93,8 +92,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/currency_convertor/style.css">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="238">
-                  <caret line="121" column="7" selection-start-line="121" selection-start-column="7" selection-end-line="121" selection-end-column="7" />
+                <state relative-caret-position="-289">
+                  <caret line="85" column="19" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
                 </state>
               </provider>
             </entry>
@@ -106,8 +105,8 @@
           <file pinned="false" current-in-tab="true">
             <entry file="file://$PROJECT_DIR$/src/currency_convertor/convertor.js">
               <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="171">
-                  <caret line="181" column="10" selection-start-line="181" selection-start-column="10" selection-end-line="181" selection-end-column="10" />
+                <state relative-caret-position="111">
+                  <caret line="227" lean-forward="true" selection-start-line="227" selection-end-line="227" />
                   <folding>
                     <element signature="e#0#39#0" expanded="true" />
                   </folding>
@@ -153,8 +152,8 @@
         <option value="$PROJECT_DIR$/src/currency_convertor/conv.js" />
         <option value="$PROJECT_DIR$/src/index.js" />
         <option value="$PROJECT_DIR$/src/currency_convertor/currencies_.js" />
-        <option value="$PROJECT_DIR$/src/currency_convertor/style.css" />
         <option value="$PROJECT_DIR$/src/currency_convertor/convertor.js" />
+        <option value="$PROJECT_DIR$/src/currency_convertor/style.css" />
       </list>
     </option>
   </component>
@@ -248,16 +247,15 @@
       <workItem from="1587734300861" duration="4879000" />
       <workItem from="1588074853649" duration="5216000" />
       <workItem from="1588098780114" duration="2429000" />
-      <workItem from="1588177406667" duration="4825000" />
+      <workItem from="1588177406667" duration="6321000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="115483000" />
+    <option name="totallyTimeSpent" value="116979000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="33" y="52" width="1390" height="724" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.06466165" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -273,7 +271,7 @@
       <window_info anchor="bottom" id="Version Control" order="8" />
       <window_info anchor="bottom" id="Database Changes" order="9" />
       <window_info anchor="bottom" id="Event Log" order="10" side_tool="true" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.21621622" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="11" visible="true" weight="0.4966216" />
       <window_info anchor="bottom" id="Python Console" order="12" />
       <window_info anchor="right" id="Commander" order="0" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
@@ -336,20 +334,20 @@
     <entry file="file://$PROJECT_DIR$/src/index.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/currency_convertor/style.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="121" column="7" selection-start-line="121" selection-start-column="7" selection-end-line="121" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/currency_convertor/convertor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="181" column="10" selection-start-line="181" selection-start-column="10" selection-end-line="181" selection-end-column="10" />
+        <state relative-caret-position="122">
+          <caret line="210" column="70" selection-start-line="210" selection-start-column="68" selection-end-line="210" selection-end-column="80" />
           <folding>
             <element signature="e#0#39#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/currency_convertor/style.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-289">
+          <caret line="85" column="19" selection-start-line="85" selection-start-column="19" selection-end-line="85" selection-end-column="19" />
         </state>
       </provider>
     </entry>
