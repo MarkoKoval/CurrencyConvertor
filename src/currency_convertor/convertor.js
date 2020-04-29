@@ -18,9 +18,11 @@ class CurrencyConvertor extends Component {
         this.SetValues = this.SetValues.bind(this);
         this.ChangeOption = this.ChangeOption.bind(this);
         this.GetCurrencyRateOnlineData = this.GetCurrencyRateOnlineData.bind(this);
+        this.SearchCurrency = this.SearchCurrency.bind(this);
         this.state = {
             available_currencies: currencies.map(a => Object.assign({}, a)),
             selected_currencies: [],
+            search_by_name_query: "",
             isOpen: true
         };
     }
@@ -170,7 +172,9 @@ class CurrencyConvertor extends Component {
             if (theEvent.preventDefault) theEvent.preventDefault();
         }
     }
-
+    SearchCurrency(evt){
+     this.setState({search_by_name_query: evt.target.value })
+    }
     render() {
         return (
 
@@ -204,12 +208,13 @@ class CurrencyConvertor extends Component {
                             onClick={this.ChangeOption}>{this.state.isOpen?"Add Currency":"Show Added Currencies"}</button>
 
                     <ul className= "add-currency-list">
+                        <input onChange={this.SearchCurrency} id = "search-input" placeholder="enter currency" />
+                        {this.state.available_currencies.filter(el => el.name.includes(this.state.search_by_name_query)).map(value => {
 
-                        {this.state.available_currencies.map(value => {
-                            return <li data-currency={value.abbreviation}  onClick={() => this.RemoveFormAvailable(value.abbreviation)}>
+                            return  <li data-currency={value.abbreviation}  onClick={() => this.RemoveFormAvailable(value.abbreviation)}>
                                         <img  alt="some text" src={value.flagURL} class="flag"/>
                                         <span>{value.abbreviation} - {value.name}</span>
-                                   </li>
+                            </li>
                         })}
 
 

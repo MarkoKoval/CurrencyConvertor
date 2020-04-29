@@ -123,6 +123,7 @@ ul.add-currency-list {
   height: calc(100vh - 40px - 100px - 55px);
   overflow-y: auto;
   transition: all 0.25s;
+   overflow-x: hidden;
 }
 ul.add-currency-list li {
   list-style: none;
@@ -206,4 +207,12 @@ input {
   height: 30px;
   width: 450px;
   border-radius: 5px;
+}
+
+#search-input {
+  margin-left: 5px;
+  margin-bottom: 5px;
+  margin-right: 55px;
+  margin-top: 10px;
+  width: 370px;
 }
